@@ -1,5 +1,5 @@
 ---
-# vars file for mediapeers.influxdb
+# vars file for mediafellows.influxdb
 
 # Channel of influx repo to use for install
 influxdb_install_version: stable

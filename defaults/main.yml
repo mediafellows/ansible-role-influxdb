@@ -1,5 +1,5 @@
 ---
-# defaults file for mediapeers.influxdb
+# defaults file for mediafellows.influxdb
 
 influxdb_install_influxdb: true
 influxdb_install_chronograf: true

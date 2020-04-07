@@ -1,5 +1,5 @@
 ---
-# handlers file for mediapeers.influxdb
+# handlers file for mediafellows.influxdb
 
 - name: restart influxdb
   service:
