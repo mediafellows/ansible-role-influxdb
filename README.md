@@ -8,7 +8,7 @@ of [InfluxDB](https://www.influxdata.com/time-series-platform/influxdb/), [Chron
 This role is meant for a server that receives metrics from the [Telegraf](https://www.influxdata.com/time-series-platform/telegraf/) agent and stores them in InfluxDB to allow monitoring and alerting
 through Chronograf and Kapacitor all on one host. Chronograf will be configured with Github OAuth to protect from public access.
 
-If you also want to install Telegraf, there is a seperate role [mediapeers.telegraf](https://github.com/mediapeers/ansible-role-telegraf) that can be used on all machines that you want monitored.
+If you also want to install Telegraf, there is a seperate role [mediafellows.telegraf](https://github.com/mediafellows/ansible-role-telegraf) that can be used on all machines that you want monitored.
 
 ## Requirements
 
@@ -54,7 +54,7 @@ Example role integration into your play:
       vars:
         influxdb_port: 123
       roles:
-         - mediapeers.influxdb
+         - mediafellows.influxdb
       tasks:
         # other tasks
 
@@ -64,4 +64,4 @@ BSD, as-is.
 
 ## Author Information
 
-Stefan Horning <horning@mediapeers.com>
+Stefan Horning <stefan.horning@mediafellows.com>
