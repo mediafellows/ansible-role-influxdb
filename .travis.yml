@@ -39,9 +39,9 @@ script:
   # Allow ~10 'changes' for status updates and restarts.
   - >
     ansible-playbook -i tests/inventory tests/$SITE --connection=local
-#    | grep -q 'changed=10.*failed=0'
-#    && (echo 'Idempotence test: pass' && exit 0)
-#    || (echo 'Idempotence test: fail' && exit 1)
+    | grep -q 'changed=9.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
 
   # Run serverspec
   - rake spec
