@@ -1,4 +1,5 @@
 galaxy_info:
+  role_name: influxdb
   author: Stefan Horning
   description: Role to setting up a InfluxDB / TICK monitoring server
   company: Mediapeers GmbH
