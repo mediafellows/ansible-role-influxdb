@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/mediafellows/ansible-role-influxdb.svg?branch=master)](https://travis-ci.com/mediafellows/ansible-role-influxdb)
+[![Ansible-Test](https://github.com/mediafellows/ansible-role-influxdb/workflows/Ansible-Test/badge.svg)](https://github.com/mediafellows/ansible-role-influxdb/actions?query=workflow%3AAnsible-Test)
 
 # Ansible InfluxDB server role
 
