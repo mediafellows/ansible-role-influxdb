@@ -38,8 +38,8 @@ jobs:
       - name: Real Ansible run
         run: ansible-playbook -i tests/inventory tests/test.yml
 
-      - name: Second run to check for indempotence (allowing 9 changes for status updates)
-        run: "ansible-playbook -i tests/inventory tests/test.yml | grep -q 'changed=9.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)"
+      - name: Second run to check for indempotence (allowing ~10 changes for status updates)
+        run: "ansible-playbook -i tests/inventory tests/test.yml | grep -q 'changed=10.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)"
 
       - name: Setup serverspec (install gem)
         run: sudo gem install serverspec
