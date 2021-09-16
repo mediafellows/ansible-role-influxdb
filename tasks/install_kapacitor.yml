@@ -1,22 +1,22 @@
 # Installs and configures Kapacitor Alerting deamon for InfluxDB
 
 - name: Install Kapacitor package
-  apt:
+  ansible.builtin.apt:
     name: kapacitor
     state: present
 
 - name: Stop Kapacitor for config phase
-  service:
+  ansible.builtin.service:
     name: chronograf
     state: stopped
 
 - name: Configures Kapacitor (mostly InfluxDB credentials)
-  template:
+  ansible.builtin.template:
     src: kapacitor.conf.j2
     dest: /etc/kapacitor/kapacitor.conf
 
 - name: Restore config DB for Kapacitor kapacitor dir
-  copy:
+  ansible.builtin.copy:
     src: '{{ influxdb_kapacitor_db_backup }}'
     dest: '{{ kapacitor_data_dir }}/kapacitor.db'
     owner: kapacitor
@@ -24,7 +24,7 @@
   when: influxdb_kapacitor_db_backup is defined
 
 - name: Start Kapacitor
-  service:
+  ansible.builtin.service:
     name: chronograf
     enabled: yes
     state: started

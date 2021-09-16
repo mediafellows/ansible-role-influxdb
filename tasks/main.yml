@@ -4,38 +4,37 @@
 # Installs influxdata repo and key:
 
 - name: Import InfluxData GPG signing key
-  apt_key:
+  ansible.builtin.apt_key:
     url: "{{ influxdb_repo_base_url }}/influxdb.key"
     state: present
 
 - name: Add InfluxData repository
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: deb {{ influxdb_repo_base_url }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} {{ influxdb_install_version }}
     state: present
 
 - name: Update apt index
-  apt:
+  ansible.builtin.apt:
     update_cache: true
 
 - name: Install influxdb python binding in order to user the Ansible influxdb_database module
-  apt:
+  ansible.builtin.apt:
     name: python-influxdb
     state: present
   when: ansible_python_version <= '3.0'
 
-- apt:
+- ansible.builtin.apt:
     name: python3-influxdb
     state: present
   when: ansible_python_version >= '3.0'
 
 # Install and configure each component:
 
-- import_tasks: install_influxdb.yml
+- ansible.builtin.import_tasks: install_influxdb.yml
   when: influxdb_install_influxdb
 
-- import_tasks: install_chronograf.yml
+- ansible.builtin.import_tasks: install_chronograf.yml
   when: influxdb_install_chronograf
 
-- import_tasks: install_kapacitor.yml
+- ansible.builtin.import_tasks: install_kapacitor.yml
   when: influxdb_install_kapacitor
-

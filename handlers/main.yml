@@ -2,19 +2,19 @@
 # handlers file for mediafellows.influxdb
 
 - name: restart influxdb
-  service:
+  ansible.builtin.service:
     name: influxdb
     enabled: yes
     state: restarted
 
 - name: restart chronograf
-  service:
+  ansible.builtin.service:
     name: chronograf
     enabled: yes
     state: restarted
 
 - name: restart kapacitor
-  service:
+  ansible.builtin.service:
     name: kapacitor
     enabled: yes
     state: restarted

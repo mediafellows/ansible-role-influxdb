@@ -1,22 +1,22 @@
 # Installs and configures Chronograf the Webapp for InfluxDB
 
 - name: Install chronograf package
-  apt:
+  ansible.builtin.apt:
     name: chronograf
     state: present
 
 - name: Stop Chronograf
-  service:
+  ansible.builtin.service:
     name: chronograf
     state: stopped
 
 - name: Configure startup params (overwriting default init script ENV variables)
-  template:
+  ansible.builtin.template:
     src: chronograf_defaults.j2
     dest: /etc/default/chronograf
 
 - name: Restore config DB for Chronograf to usual location
-  copy:
+  ansible.builtin.copy:
     src: '{{ influxdb_chronograf_db_backup }}'
     dest: /var/lib/chronograf/chronograf-v1.db
     owner: chronograf
@@ -24,7 +24,7 @@
   when: influxdb_chronograf_db_backup is defined
 
 - name: Start Chronograf
-  service:
+  ansible.builtin.service:
     name: chronograf
     enabled: yes
     state: started

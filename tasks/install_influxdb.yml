@@ -2,12 +2,12 @@
 # and to let Chronograf and Kapacitor connect to it with their own users
 
 - name: Install InfluxDB package
-  apt:
+  ansible.builtin.apt:
     name: influxdb
     state: present
 
 - name: Create InfluxDB data dir with correct permissions
-  file:
+  ansible.builtin.file:
     name: "{{ influxdb_data_dir }}"
     owner: influxdb
     group: influxdb
@@ -15,28 +15,28 @@
     state: directory
 
 - name: Make sure InfluxDB is started (for following tasks)
-  service:
+  ansible.builtin.service:
     name: influxdb
     state: started
 
 - name: Pause a few seconds to wait for service to come up
-  pause:
+  ansible.builtin.pause:
     seconds: 6
 
 - name: Test if InfluxDB is running
-  shell: "curl --silent -I http://{{ influxdb_host }}:{{ influxdb_port}}/ping"
-  args:
+  ansible.builtin.shell:
+    cmd: "curl --silent -I http://{{ influxdb_host }}:{{ influxdb_port}}/ping"
     warn: false
   register: curl_result
 
 - name: InfluxDB request response
-  debug:
+  ansible.builtin.debug:
     var: curl_result.stdout_lines
 
 # -- Admin user Creation (when not in restore backup mode and when auth is still off) --
 
 - name: Check if auth is already switched on (from previous run/install)
-  uri:
+  ansible.builtin.uri:
     url: "http://{{ influxdb_host }}:{{ influxdb_port}}/query"
     return_content: yes
     status_code:
@@ -46,14 +46,14 @@
   register: query_result
 
 - name: Determine result of auth check (if we are not in restore mode)
-  set_fact:
+  ansible.builtin.set_fact:
     influxdb_auth_status: "{{ query_result.json['error'] }}"
   when:
     - influxdb_meta_backup is undefined
     - query_result is defined
 
 - name: Create InfluxDB admin user (if auth is off)
-  influxdb_user:
+  community.general.influxdb_user:
     # Connection details:
     hostname:       "{{ influxdb_host }}"
     port:           "{{ influxdb_port }}"
@@ -70,40 +70,41 @@
 # -- Configuration and Restore (if in restore mode) --
 
 - name: Stop the InfluxDB server before configuration/restore
-  service:
+  ansible.builtin.service:
     name: influxdb
     state: stopped
 
 - name: Configure InfluxDB (also enables auth)
-  template:
+  ansible.builtin.template:
     src: influxdb.conf.j2
     dest: /etc/influxdb/influxdb.conf
 
 - name: Use backup for setting up users/DBs settings (intead of creating them with Ansible)
-  copy:
+  ansible.builtin.copy:
     src: '{{ influxdb_meta_backup }}'
     dest: '/home/ubuntu/backup/'
   when: influxdb_meta_backup is defined
 
-- shell: influxd restore -metadir {{ influxdb_meta_dir }} /home/ubuntu/backup/
+- ansible.builtin.shell:
+    cmd: influxd restore -metadir {{ influxdb_meta_dir }} /home/ubuntu/backup/
   when: influxdb_meta_backup is defined
   register: restore_output
 
 - name: Restore output
-  debug:
+  ansible.builtin.debug:
     var: restore_output
   when: influxdb_meta_backup is defined
 
 # --- Initial setup of Dabases and users for Telegraf and Chronograf (if not in restore mode) ---
 
 - name: Start the InfluxDB server again
-  service:
+  ansible.builtin.service:
     name: influxdb
     enabled: yes
     state: started
 
 - name: Wait for the influxdb service to come up
-  uri:
+  ansible.builtin.uri:
     url: "http://{{ influxdb_host }}:{{ influxdb_port }}/status"
     status_code: 200,204
   retries: 20
@@ -113,7 +114,7 @@
   changed_when: false
 
 - name: Create telegraf and chronograf DBs
-  influxdb_database:
+  community.general.influxdb_database:
     # Connection details:
     hostname:       "{{ influxdb_host }}"
     port:           "{{ influxdb_port }}"
@@ -128,7 +129,7 @@
   when: influxdb_meta_backup is undefined
 
 - name: Create retention policy for telegraf DB
-  influxdb_retention_policy:
+  community.general.influxdb_retention_policy:
     # Connection details:
     hostname:       "{{ influxdb_host }}"
     port:           "{{ influxdb_port }}"
@@ -143,7 +144,7 @@
   when: influxdb_meta_backup is undefined
 
 - name: Create InfluxDB chronograf user for Chronograf app access
-  influxdb_user:
+  community.general.influxdb_user:
     # Connection details:
     hostname:       "{{ influxdb_host }}"
     port:           "{{ influxdb_port }}"
@@ -156,7 +157,7 @@
   when: influxdb_meta_backup is undefined
 
 - name: Grant access to telegraf and chronograf DBs for chronograf user
-  influxdb_query:
+  community.general.influxdb_query:
     # Connection details:
     hostname:       "{{ influxdb_host }}"
     port:           "{{ influxdb_port }}"
@@ -171,7 +172,7 @@
   when: influxdb_meta_backup is undefined
 
 - name: Create InfluxDB user for the telegraf agents
-  influxdb_user:
+  community.general.influxdb_user:
     # Connection details:
     hostname:       "{{ influxdb_host }}"
     port:           "{{ influxdb_port }}"
@@ -184,7 +185,7 @@
   when: influxdb_meta_backup is undefined
 
 - name: Grant access to telegraf user to WRITE to telegraf DB
-  influxdb_query:
+  community.general.influxdb_query:
     # Connection details:
     hostname:       "{{ influxdb_host }}"
     port:           "{{ influxdb_port }}"
