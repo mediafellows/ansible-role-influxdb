@@ -10,9 +10,6 @@ jobs:
       ANSIBLE_FORCE_COLOR: true
     steps:
 
-      - name: Remove uneeded apt repos
-        run: sudo rm /etc/apt/sources.list.d/yarn*
-
       - name: Checkout code from Github
         uses: actions/checkout@v2
 
