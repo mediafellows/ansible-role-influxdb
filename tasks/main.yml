@@ -5,7 +5,7 @@
 
 - name: Import InfluxData GPG signing key
   ansible.builtin.apt_key:
-    url: "{{ influxdb_repo_base_url }}/influxdb.key"
+    url: "{{ influxdb_repo_base_url }}/influxdata-archive_compat.key"
     state: present
 
 - name: Add InfluxData repository
