@@ -26,7 +26,6 @@
 - name: Test if InfluxDB is running
   ansible.builtin.shell:
     cmd: "curl --silent -I http://{{ influxdb_host }}:{{ influxdb_port}}/ping"
-    warn: false
   register: curl_result
 
 - name: InfluxDB request response
