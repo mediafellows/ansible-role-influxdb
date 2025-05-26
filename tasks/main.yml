@@ -9,7 +9,7 @@
 
 - name: Add InfluxData repository
   ansible.builtin.apt_repository:
-    repo: deb [signed-by=/usr/share/keyrings/influxdb-keyring.gpg] {{ influxdb_repo_base_url }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable
+    repo: deb [signed-by=/usr/share/keyrings/influxdb-keyring.gpg] {{ influxdb_repo_base_url }}/{{ ansible_distribution | lower }} stable main
     state: present
 
 - name: Update apt index
