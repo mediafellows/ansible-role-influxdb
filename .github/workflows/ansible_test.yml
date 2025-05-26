@@ -41,5 +41,5 @@ jobs:
       - name: Setup serverspec (install gem)
         run: sudo gem install serverspec
 
-      - name: Run serverspec
-        run: rake spec
+      - name: Run serverspec (run as root to be able to access all files)
+        run: sudo rake spec

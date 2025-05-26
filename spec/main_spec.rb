@@ -8,6 +8,7 @@ describe 'InfluxDB setup' do
 
   describe file('/etc/influxdb/influxdb.conf') do
     it { should be_file }
+    its(:content) { should include("enabled = true") }
     its(:content) { should include("auth-enabled = true") }
   end
 

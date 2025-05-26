@@ -1,4 +1,4 @@
-[![Ansible-Test](https://github.com/mediafellows/ansible-role-influxdb/workflows/Ansible-Test/badge.svg)](https://github.com/mediafellows/ansible-role-influxdb/actions?query=workflow%3AAnsible-Test)
+[![Ansible-Test](https://github.com/mediafellows/ansible-role-influxdb/actions/workflows/ansible_test.yml/badge.svg)](https://github.com/mediafellows/ansible-role-influxdb/actions/workflows/ansible_test.yml)
 
 # Ansible InfluxDB server role
 
