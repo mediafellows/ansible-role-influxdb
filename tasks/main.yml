@@ -10,7 +10,7 @@
 
 - name: Add InfluxData repository
   ansible.builtin.apt_repository:
-    repo: deb {{ influxdb_repo_base_url }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} {{ influxdb_install_version }}
+    repo: deb {{ influxdb_repo_base_url }}/{{ ansible_distribution | lower }} stable main
     state: present
 
 - name: Update apt index
