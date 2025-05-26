@@ -3,14 +3,13 @@
 
 # Installs influxdata repo and key:
 
-- name: Import InfluxData GPG signing key
-  ansible.builtin.apt_key:
-    url: "{{ influxdb_repo_base_url }}/influxdata-archive_compat.key"
-    state: present
+- name: Import InfluxData apt package signing key
+  ansible.builtin.shell:
+    cmd: curl -fsSL {{ influxdb_repo_base_url }}/influxdata-archive_compat.key|sudo gpg --dearmor -o /usr/share/keyrings/influxdb-keyring.gpg
 
 - name: Add InfluxData repository
   ansible.builtin.apt_repository:
-    repo: deb {{ influxdb_repo_base_url }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} {{ influxdb_install_version }}
+    repo: deb [signed-by=/usr/share/keyrings/influxdb-keyring.gpg] {{ influxdb_repo_base_url }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable
     state: present
 
 - name: Update apt index
