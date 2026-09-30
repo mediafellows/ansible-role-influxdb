@@ -3,14 +3,21 @@
 
 # Installs influxdata repo and key:
 
-- name: Import InfluxData GPG signing key
-  ansible.builtin.apt_key:
-    url: "{{ influxdb_repo_base_url }}/influxdata-archive_compat.key"
-    state: present
+- name: Remove legacy InfluxData repository configuration
+  ansible.builtin.apt_repository:
+    repo: deb {{ influxdb_repo_base_url }}/{{ ansible_distribution | lower }} stable main
+    state: absent
+
+- name: Install InfluxData GPG signing key
+  ansible.builtin.get_url:
+    url: "{{ influxdb_repo_base_url }}/influxdata-archive.key"
+    dest: /etc/apt/trusted.gpg.d/influxdata-archive.asc
+    mode: "0644"
+    force: true
 
 - name: Add InfluxData repository
   ansible.builtin.apt_repository:
-    repo: deb {{ influxdb_repo_base_url }}/{{ ansible_distribution | lower }} stable main
+    repo: deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive.asc] {{ influxdb_repo_base_url }}/{{ ansible_distribution | lower }} stable main
     state: present
 
 - name: Update apt index
